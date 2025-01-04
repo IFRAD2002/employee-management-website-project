@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Employee</title>
+    <style>
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1e1e1e;
+            background-image: url('signup_page_background.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+
+        .container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            text-align: center;
+            color: #f8f9fa;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #333;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border: 1px solid #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        button {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .radio-label {
+            display: inline-block;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add New Employee</h2>
+        <form action="insert_employee.php" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Full Name" required>
+
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" placeholder="@gmail.com" required>
+
+            <label for="phone_no">Phone Number:</label>
+            <input type="text" id="phone_no" name="phone_no" placeholder="Phone Number" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+
+            <label for="joining_date">Joining Date:</label>
+            <input type="date" id="joining_date" name="joining_date" required>
+
+            <label for="salary">Salary:</label>
+            <input type="number" id="salary" name="salary" placeholder="Salary in Numbers" required>
+
+            <label for="department_id">Department:</label>
+            <select id="department_id" name="department_id" required>
+
+                <?php
+
+                $conn = new mysqli("localhost", "root", "", "employee_management");
+
+
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+
+                $sql = "SELECT departmentid, Dname FROM department";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='{$row['departmentid']}'>{$row['Dname']}</option>";
+                    }
+                } else {
+                    echo "<option value='' disabled>No Departments Available</option>";
+                }
+
+
+                $conn->close();
+                ?>
+            </select>
+
+            <label>Gender:</label>
+            <div>
+                <label class="radio-label"><input type="radio" name="gender" value="Male" required> Male</label>
+                <label class="radio-label"><input type="radio" name="gender" value="Female" required> Female</label>
+                <label class="radio-label"><input type="radio" name="gender" value="Other" required> Other</label>
+            </div>
+
+            <button type="submit">Add Employee</button>
+        </form>
+    </div>
+</body>
+</html>
